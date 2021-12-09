@@ -1,68 +1,24 @@
-
-#include <stdio.h>
-
-int i, n;
-float tatAvg, wtAvg;
-
-void read(int b[]) 
-{
-   for (i = 0; i < n; ++i) 
-      {
-        printf("Enter burst time of process %d: ", i);
-        scanf("%d", &b[i]);
-      }
-}
-
-void findWaitingtime(int b[], int wt[])
- {
-    wt[0] = 0;
-    int wtSum = 0;
-    for (i = 1; i < n; ++i)
-      {
-        wt[i] = wt[i - 1] + b[i - 1];
-        wtSum += wt[i];
-      }
-    wtAvg = (float)wtSum / n;
-}
-
-void findTurnAroundtime(int tat[], int b[], int wt[]) 
-{
-    int tatSum = 0;
-    for (i = 0; i < n; ++i) 
-       {
-        tat[i] = b[i] + wt[i];
-        tatSum += tat[i];
-       }
-    tatAvg = (float)tatSum / n;
-}
-
-
-void display(int b[], int wt[], int tat[]) 
-{
-    printf("Process\tBurstTime WaitingTime  TurnAroundTime\n");
-    for (i = 0; i < n; ++i) {
-        printf("%d\t%d\t\t%d\t%d\n", i, b[i], wt[i], tat[i]);
-   }
-    printf("average waiting time: %f", wtAvg);
-    printf("\naverage turnaround time: %f", tatAvg);
-    printf("\n");
-}
-
-void calcTime(int b[]) {
-    int wt[20], tat[20];
-    findWaitingtime(b, wt);
-    findTurnAroundtime(tat, b, wt);
-    display(b, wt, tat);
-}
+#include<stdio.h>
+#include<stdlib.h>
 
 int main() {
-
-    int b[20];
-    printf("Number of Processes:");
+    int diskQueue[20], n, i, seekTime=0, diff;
+    printf("Enter the size of Queue: ");
     scanf("%d", &n);
-    read(b);
-    calcTime(b);
-
+    printf("Enter the Queue: ");
+    for(i=1;i<=n;i++)       {                                                            
+        scanf("%d",&diskQueue[i]);
+    }
+    printf("Enter the initial head position: ");
+    scanf("%d", &diskQueue[0]);                            
+    printf("\nMovement of Cylinders\n");
+    for(i=0;i<n;i++) {
+        diff= abs(diskQueue[i+1] - diskQueue[i]);          
+        seekTime+= diff;                    
+        printf("Move from %d to %d with seek time %d\n", diskQueue[i], diskQueue[i+1], diff);
+    }
+    printf("\nTotal Seek Time: %d", seekTime);
+    printf("\nAverage Seek Time = %f",(float) seekTime/n);
+    printf("\n");
     return 0;
 }
-
